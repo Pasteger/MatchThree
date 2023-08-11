@@ -13,6 +13,7 @@ public class StoneReaction : MonoBehaviour
     private int score = 0;
     //<Id first stone in stones, number of stones in row>
     Dictionary<int, int> horisontalStones = new Dictionary<int, int>();
+    //<Id first stone in stones, number of stones in column>
     Dictionary<int, int> verticalStones = new Dictionary<int, int>();
     int gridWidth;
     int gridHeight;
@@ -24,14 +25,13 @@ public class StoneReaction : MonoBehaviour
         gridHeight = gameObject.GetComponent<GenerateFild>().gridHeight;
         stoneRadius = gameObject.GetComponent<GenerateFild>().stoneRadius;
 
-
-        //StartCoroutine(Test());
     }
 
     void Update()
     {
-        HorizontalCheking();
-        VerticalCheking();
+        //HorizontalCheking();
+        //VerticalCheking();
+        Checking();
 
         for (int i = 0; i < stones.Count; i++)
         {
@@ -65,6 +65,174 @@ public class StoneReaction : MonoBehaviour
 
         horisontalStones.Clear();
         verticalStones.Clear();
+    }
+
+    void Checking()
+    {
+        for(int index = 0; index < stones.Count; index++)
+        {
+            float row = index / gridHeight;
+            float column = index % gridWidth;
+
+            if ((row == 0 || row == gridWidth - 1) && (column == 0 || column == gridHeight - 1))
+            {
+                continue;
+            }
+
+            int position = 0;
+            if (row == 0 || row == gridWidth - 1)
+            {
+                position = 1;
+            }
+            else if (column == 0 || column == gridHeight - 1)
+            {
+                position = -1;
+            }
+
+            Sprite stoneSprite = stones[index].GetComponent<SpriteRenderer>().sprite;
+
+            
+            if (position > -1 && 
+                stones[index - 1].GetComponent<SpriteRenderer>().sprite.Equals(stoneSprite) &&
+                stones[index + 1].GetComponent<SpriteRenderer>().sprite.Equals(stoneSprite))
+            {
+                stones[index].tag = "activeHorisontal";
+               
+            }
+            if (position < 1 && 
+                stones[index - gridWidth].GetComponent<SpriteRenderer>().sprite.Equals(stoneSprite) &&
+                stones[index + gridWidth].GetComponent<SpriteRenderer>().sprite.Equals(stoneSprite))
+            {
+                stones[index].tag = "activeVertical";
+            }
+        }
+
+        for (int index = 0; index < stones.Count; index++)
+        {
+            Sprite stoneSprite = stones[index].GetComponent<SpriteRenderer>().sprite;
+            try
+            {
+                if (stones[index - 1].tag.Contains("active") && 
+                    stones[index - 1].GetComponent<SpriteRenderer>().sprite.Equals(stoneSprite))
+                {
+                    stones[index].tag = "activeHorisontal";
+                    continue;
+                }
+            }
+            catch { }
+            try
+            {
+                if (stones[index + 1].tag.Contains("active") &&
+                    stones[index + 1].GetComponent<SpriteRenderer>().sprite.Equals(stoneSprite))
+                {
+                    stones[index].tag = "activeHorisontal";
+                    continue;
+                }
+            }
+            catch { }
+            try
+            {
+                if (stones[index - gridWidth].tag.Contains("active") &&
+                    stones[index - gridWidth].GetComponent<SpriteRenderer>().sprite.Equals(stoneSprite))
+                {
+                    stones[index].tag = "activeVertical";
+                    continue;
+                }
+            }
+            catch { }
+            try
+            {
+                if (stones[index + gridWidth].tag.Contains("active") &&
+                    stones[index + gridWidth].GetComponent<SpriteRenderer>().sprite.Equals(stoneSprite))
+                {
+                    stones[index].tag = "activeVertical";
+                    continue;
+                }
+            }
+            catch { }
+        }
+
+        for (int index = 0; index < stones.Count; index++)
+        {
+            if (stones[index].tag.Equals("activeHorisontal"))
+            {
+                try
+                {
+                    if (stones[index - 1].tag.Equals("activeHorisontal"))
+                    {
+                        continue;
+                    }
+                }
+                catch { }
+
+                int count = 1;
+                int nextIndex = index;
+                while (true)
+                {
+                    nextIndex++;
+                    try
+                    {
+                        if (stones[nextIndex].tag.Equals("activeHorisontal"))
+                        {
+                            count++;
+                        }
+                        else
+                        {
+                            horisontalStones.Add(index, count);
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            horisontalStones.Add(index, count);
+                        }
+                        catch { }
+                        break;
+                    }
+                }
+            }
+            if (stones[index].tag.Equals("activeVertical"))
+            {
+                try
+                {
+                    if (stones[index - gridWidth].tag.Equals("activeVertical"))
+                    {
+                        continue;
+                    }
+                }
+                catch { }
+
+                int count = 1;
+                int nextIndex = index;
+                while (true)
+                {
+                    nextIndex += gridWidth;
+                    try
+                    {
+                        if (stones[nextIndex].tag.Equals("activeVertical"))
+                        {
+                            count++;
+                        }
+                        else
+                        {
+                            verticalStones.Add(index, count);
+                            break;
+                        }
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            verticalStones.Add(index, count);
+                        }
+                        catch { }
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     void HorizontalCheking()
@@ -191,26 +359,5 @@ public class StoneReaction : MonoBehaviour
         }
     }
 
-    int i = 0;
-    private IEnumerator Test()
-    {
-        while (true)
-        {
-            try
-            {
-                GameObject stone = stones[i];
-                Debug.Log(i);
-                stone.transform.localScale = new Vector3(
-                        stone.transform.localScale.x + 0.1f,
-                        stone.transform.localScale.x + 0.1f, 0);
-                i++;
-            }
-            catch
-            {
-                i = 0;
-                Debug.Log("i = 0");
-            }
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
+
 }
