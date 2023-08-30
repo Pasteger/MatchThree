@@ -1,71 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
-public class SelectedStonesHandler : MonoBehaviour
+public static class SelectedStonesHandler 
 {
-    private static GameObject selectedStone;
-    private static GameObject targetStone;
-
-    // Update is called once per frame
-    void Update()
+    private static GameObject _selectedStone;
+    private static GameObject _targetStone;
+    
+    private static void SwapStones()
     {
-        if (targetStone != null)
-        {
-            SwapStones();
-        }
-    }
-
-    private void SwapStones() 
-    {
-        List<GameObject> stones = gameObject.GetComponent<GenerateFild>().stones;
-        int width = gameObject.GetComponent<GenerateFild>().gridWidth;
-
-        int selectedStoneIndex = stones.IndexOf(selectedStone);
-        int targetStoneIndex = stones.IndexOf(targetStone);
-
-        int distanse = selectedStoneIndex - targetStoneIndex;
-        if (distanse == 1 || distanse == -1 || distanse == width || distanse == -width) 
-        {
-            Vector3 selectedStonePosition = selectedStone.transform.position;
-            Vector3 targetStonePosition = targetStone.transform.position;
-
-            selectedStone.transform.position = targetStonePosition;
-            targetStone.transform.position = selectedStonePosition;
-
-            stones[selectedStoneIndex] = targetStone;
-            stones[targetStoneIndex] = selectedStone;
-        }
-
+        Swap();
+        
         UndoSetStone();
     }
 
-    public void SetStone(GameObject stone)
+    private static void Swap()
     {
-        if (selectedStone == null)
+        var selectedStonePosition = _selectedStone.transform.position;
+        var targetStonePosition = _targetStone.transform.position;
+
+        if ((!Math.Abs(selectedStonePosition.x - targetStonePosition.x).Equals(1f) ||
+             !(selectedStonePosition.y - targetStonePosition.y).Equals(0)) &&
+            (!Math.Abs(selectedStonePosition.y - targetStonePosition.y).Equals(1f) ||
+             !(selectedStonePosition.x - targetStonePosition.x).Equals(0)))
         {
-            selectedStone = stone;
-            selectedStone.transform.localScale = new Vector3(
-                selectedStone.transform.localScale.x + 0.1f,
-                selectedStone.transform.localScale.x + 0.1f, 0);
+            return;
         }
-        else if (selectedStone.Equals(stone))
+        
+        _selectedStone.transform.position = targetStonePosition;
+        _targetStone.transform.position = selectedStonePosition;
+        
+        _selectedStone.GetComponent<BoxCollider>().center = Vector3.zero;
+        _targetStone.GetComponent<BoxCollider>().center = Vector3.zero;
+    }
+
+    public static void SetStone(GameObject stone)
+    {
+        if (_selectedStone == null)
+        {
+            _selectedStone = stone;
+            var localScale = _selectedStone.transform.localScale;
+            localScale = new Vector3(
+                localScale.x + 0.1f,
+                localScale.x + 0.1f, 1);
+            _selectedStone.transform.localScale = localScale;
+        }
+        else if (_selectedStone.Equals(stone))
         {
             UndoSetStone();
         }
         else 
         {
-            targetStone = stone;
+            _targetStone = stone;
+            SwapStones();
         }
     }
 
-    public void UndoSetStone()
+    private static void UndoSetStone()
     {
-        selectedStone.transform.localScale = new Vector3(
-            selectedStone.transform.localScale.x - 0.1f,
-            selectedStone.transform.localScale.x - 0.1f, 0);
-        selectedStone = null;
-        targetStone = null;
+        var localScale = _selectedStone.transform.localScale;
+        localScale = new Vector3(
+            localScale.x - 0.1f,
+            localScale.x - 0.1f, 1);
+        _selectedStone.transform.localScale = localScale;
+        _selectedStone = null;
+        _targetStone = null;
     }
 }
