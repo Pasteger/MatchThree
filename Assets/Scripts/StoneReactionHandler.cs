@@ -5,63 +5,87 @@ using UnityEngine;
 public class StoneReactionHandler : MonoBehaviour
 {
     public GameObject stones;
-    public readonly List<GameObject> StoneList = new();
-    
+    private readonly List<GameObject> _stoneList = new();
+
     public void Update()
     {
         SetStoneList();
-        
+
         FindMatches();
-        
+
         DestroyStones();
-        
-        StoneList.Clear();
+
+        UndoSwapStones();
+
+        _stoneList.Clear();
     }
 
-    public void SetStoneList()
+    private void UndoSwapStones()
+    {
+        foreach (var stone in _stoneList.Where(stone => stone.CompareTag("Swaped")))
+        {
+            SelectedStonesHandler.SetStone(stone);
+        }
+        foreach (var stone in _stoneList.Where(stone => stone.CompareTag("Swaped")))
+        {
+            stone.tag = "Untagged";
+        }
+    }
+
+
+    private void SetStoneList()
     {
         var stonesTransforms = stones.transform.GetComponentsInChildren<Transform>().ToList();
         stonesTransforms.Remove(stones.transform);
 
-        StoneList.AddRange(stonesTransforms.Select(stoneTransform => stoneTransform.gameObject).ToList());
-
+        _stoneList.AddRange(stonesTransforms.Select(stoneTransform => stoneTransform.gameObject).ToList());
     }
-    
-    public void FindMatches()
+
+    private void FindMatches()
     {
-        foreach (var stone in StoneList)
+        foreach (var stone in _stoneList)
         {
             var stoneTexture = stone.GetComponent<MeshRenderer>().material.mainTexture;
-            
-            if (Physics.Raycast(new Ray(stone.transform.position, Vector3.up), out var upHitInfo, 1f) && 
-                Physics.Raycast(new Ray(stone.transform.position, Vector3.down), out var downHirInfo, 1f) 
-                && upHitInfo.collider.gameObject.GetComponent<MeshRenderer>().material.mainTexture.Equals(stoneTexture) &&
+
+            if (Physics.Raycast(new Ray(stone.transform.position, Vector3.up), out var upHitInfo, 1f) &&
+                Physics.Raycast(new Ray(stone.transform.position, Vector3.down), out var downHirInfo, 1f)
+                && upHitInfo.collider.gameObject.GetComponent<MeshRenderer>().material.mainTexture
+                    .Equals(stoneTexture) &&
                 downHirInfo.collider.gameObject.GetComponent<MeshRenderer>().material.mainTexture.Equals(stoneTexture)
                 && !upHitInfo.collider.gameObject.Equals(stone) && !downHirInfo.collider.gameObject.Equals(stone))
             {
-                stone.tag = "active";
-                upHitInfo.collider.gameObject.tag = "active";
-                downHirInfo.collider.gameObject.tag = "active";
+                stone.tag = "Active";
+                upHitInfo.collider.gameObject.tag = "Active";
+                downHirInfo.collider.gameObject.tag = "Active";
             }
-            
-            if (Physics.Raycast(new Ray(stone.transform.position, Vector3.left), out var leftHitInfo, 1f) && 
-                Physics.Raycast(new Ray(stone.transform.position, Vector3.right), out var rightHirInfo, 1f) 
-                && leftHitInfo.collider.gameObject.GetComponent<MeshRenderer>().material.mainTexture.Equals(stoneTexture) &&
+
+            if (Physics.Raycast(new Ray(stone.transform.position, Vector3.left), out var leftHitInfo, 1f) &&
+                Physics.Raycast(new Ray(stone.transform.position, Vector3.right), out var rightHirInfo, 1f)
+                && leftHitInfo.collider.gameObject.GetComponent<MeshRenderer>().material.mainTexture
+                    .Equals(stoneTexture) &&
                 rightHirInfo.collider.gameObject.GetComponent<MeshRenderer>().material.mainTexture.Equals(stoneTexture)
                 && !leftHitInfo.collider.gameObject.Equals(stone) && !rightHirInfo.collider.gameObject.Equals(stone))
             {
-                stone.tag = "active";
-                leftHitInfo.collider.gameObject.tag = "active";
-                rightHirInfo.collider.gameObject.tag = "active";
+                stone.tag = "Active";
+                leftHitInfo.collider.gameObject.tag = "Active";
+                rightHirInfo.collider.gameObject.tag = "Active";
             }
         }
     }
-    
+
     private void DestroyStones()
     {
-        foreach (var stone in StoneList.Where(stone => stone.tag.Equals("active")))
+        var stonesForDestroy = _stoneList.Where(stone =>
+            stone.CompareTag("Active")).ToList();
+        
+        if (stonesForDestroy.Count == 0) return;
+        
+        
+        foreach (var stone in _stoneList)
         {
-            Destroy(stone);
+            stone.tag = "Untagged";
         }
+        
+        stonesForDestroy.ForEach(Destroy);
     }
 }

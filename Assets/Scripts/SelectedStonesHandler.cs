@@ -26,6 +26,10 @@ public static class SelectedStonesHandler
             return;
         }
         
+        _selectedStone.tag = "Swaped";
+        _targetStone.tag = "Swaped";
+        
+
         _selectedStone.transform.position = targetStonePosition;
         _targetStone.transform.position = selectedStonePosition;
         

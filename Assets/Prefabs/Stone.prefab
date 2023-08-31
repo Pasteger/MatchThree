@@ -47,7 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee55c8694b796f64da941e0b79ebffa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedStonesHandler: {fileID: 4854218491760062973, guid: 12e3a4f8d5068794c8a3f0c2432b166f, type: 3}
 --- !u!33 &8564408714033672145
 MeshFilter:
   m_ObjectHideFlags: 0
