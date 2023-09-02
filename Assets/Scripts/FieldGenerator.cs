@@ -25,7 +25,7 @@ public class FieldGenerator : MonoBehaviour
         }
     }
 
-    public void SpawnStone(float x, float y)
+    public GameObject SpawnStone(float x, float y)
     {
         var stone = Instantiate(stonePrefab, new Vector3(x, y, ZPositionTypes.Stone), Quaternion.identity);
         stone.GetComponent<MeshRenderer>().sharedMaterial = new Material(_material)
@@ -33,6 +33,7 @@ public class FieldGenerator : MonoBehaviour
             mainTexture = textures[Random.Range(0, textures.Count)]
         };
         stone.transform.SetParent(stones.transform);
+        return stone;
     }
 
     private void GenerateStone(float x, float y)

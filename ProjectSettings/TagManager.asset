@@ -4,10 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - activeVertical
-  - activeHorizontal
-  - active
   - Selected
+  - Swaped
+  - Active
   layers:
   - Default
   - TransparentFX

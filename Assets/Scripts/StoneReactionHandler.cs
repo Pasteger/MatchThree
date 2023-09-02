@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StoneReactionHandler : MonoBehaviour
 {
     public GameObject stones;
+    public Text scoreText;
+    
     private readonly List<GameObject> _stoneList = new();
 
     public void Update()
@@ -86,6 +89,15 @@ public class StoneReactionHandler : MonoBehaviour
             stone.tag = "Untagged";
         }
         
+        AddScoreToScoreText(stonesForDestroy.Count);
+        
         stonesForDestroy.ForEach(Destroy);
+    }
+
+    private void AddScoreToScoreText(int score)
+    {
+        var intScoreText = int.Parse(scoreText.text.Substring(6));
+        intScoreText += score;
+        scoreText.text = "Score: " + intScoreText;
     }
 }
