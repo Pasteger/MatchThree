@@ -7,7 +7,14 @@ public class EndLevelConditionBehaviour : MonoBehaviour
     public Text scoreText;
     public string nextLevel;
 
+    private UserDataManager _userDataManager;
+    
     private bool _end;
+
+    private void Awake()
+    {
+        _userDataManager = UserDataManager.GetInstance();
+    }
 
     private void Update()
     {
@@ -18,6 +25,8 @@ public class EndLevelConditionBehaviour : MonoBehaviour
             )
         {
             _end = true;
+            ActiveUser.User.levelCount = int.Parse(nextLevel[5..]);
+            _userDataManager.SaveUsers();
             SceneTransition.SwitchScene(nextLevel);
         }
     }

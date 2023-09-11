@@ -599,7 +599,7 @@ PrefabInstance:
       objectReference: {fileID: 691875742}
     - target: {fileID: 6160535601940301007, guid: 15ab666d994ffe149bbec1a880878ca3, type: 3}
       propertyPath: nextLevel
-      value: Level2
+      value: MainMenu
       objectReference: {fileID: 0}
     - target: {fileID: 6160535601940301007, guid: 15ab666d994ffe149bbec1a880878ca3, type: 3}
       propertyPath: scoreText
