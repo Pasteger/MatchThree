@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MainMenuUIBehaviour : MonoBehaviour
 {
     public GameObject loadGameButton;
+    public GameObject levelsMenuButton;
     
     public GameObject userController;
     public Text usernameText;
@@ -15,14 +16,24 @@ public class MainMenuUIBehaviour : MonoBehaviour
     
     private List<Sprite> _avatars;
 
+    private Button _loadGameComponentButton;
+    private Button _levelsMenuComponentButton;
     private void Start()
     {
         _avatars = selectAvatarListBehaviour.avatars;
+        _loadGameComponentButton = loadGameButton.GetComponent<Button>();
+        _levelsMenuComponentButton = levelsMenuButton.GetComponent<Button>();
+
     }
 
     public void LoadGameButtonClick()
     {
         SceneTransition.SwitchScene("Level" + ActiveUser.User.levelCount);
+    }
+    
+    public void LevelsMenuButtonClick()
+    {
+        SceneTransition.SwitchScene("LevelsMenu");
     }
 
     public void NewGameButtonClick()
@@ -50,7 +61,8 @@ public class MainMenuUIBehaviour : MonoBehaviour
 
     private void Update()
     {
-        loadGameButton.SetActive(ActiveUser.User.levelCount > 0);
+        _loadGameComponentButton.interactable  = ActiveUser.User.levelCount > 0;
+        _levelsMenuComponentButton.interactable  = ActiveUser.User.levelCount > 0;
         
         usernameText.text = ActiveUser.User.username;
         

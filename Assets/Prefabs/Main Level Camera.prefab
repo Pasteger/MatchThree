@@ -255,7 +255,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   requiredScore: 0
   scoreText: {fileID: 0}
+  endLevelMenuScoreText: {fileID: 0}
   nextLevel: 
+  endLevelMenu: {fileID: 0}
 --- !u!114 &3895395248316382158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,3 +270,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 460a3a86338d3614fbed73e6ea635806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelMenuBehaviour: {fileID: 0}

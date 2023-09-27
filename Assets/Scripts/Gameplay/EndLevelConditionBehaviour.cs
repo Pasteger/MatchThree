@@ -5,8 +5,10 @@ public class EndLevelConditionBehaviour : MonoBehaviour
 {
     public int requiredScore;
     public Text scoreText;
+    public Text endLevelMenuScoreText;
     public string nextLevel;
-
+    public GameObject endLevelMenu;
+    
     private UserDataManager _userDataManager;
     
     private bool _end;
@@ -25,9 +27,13 @@ public class EndLevelConditionBehaviour : MonoBehaviour
             )
         {
             _end = true;
+            
             ActiveUser.User.levelCount = int.Parse(nextLevel[5..]);
+            
+            scoreText.gameObject.SetActive(false);
             _userDataManager.SaveUsers();
-            SceneTransition.SwitchScene(nextLevel);
+            endLevelMenu.SetActive(true);
+            endLevelMenuScoreText.text = scoreText.text;
         }
     }
 }

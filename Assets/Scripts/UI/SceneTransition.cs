@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -11,8 +12,9 @@ public class SceneTransition : MonoBehaviour
     private Animator _animator;
 
     public Text percentText;
+    public Image coreBar;
     public Image progressBar;
-
+    
     private float _fakeProgress;
     
     private static string _sceneName;
@@ -47,9 +49,10 @@ public class SceneTransition : MonoBehaviour
         }
     }
 
+    [Obsolete("Obsolete")]
     private void Update()
     {
-        if (!progressBar.IsActive()) return;
+        if (!coreBar.IsActive()) return;
         
         if (_fakeProgress > 1f && progressBar.fillAmount.Equals(1f))
         {
@@ -59,7 +62,10 @@ public class SceneTransition : MonoBehaviour
         else
         {
             percentText.text = (int) (_fakeProgress * 100f) + "%";
+
             progressBar.fillAmount = _fakeProgress;
+            
+            coreBar.rectTransform.RotateAround(Vector3.back, 0.005f);
             _fakeProgress += 0.01f;
         }
     }

@@ -1,13 +1,13 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SceneSwitchBehaviour : MonoBehaviour
 {
+	public LevelMenuBehaviour levelMenuBehaviour;
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().name != "MainMenu")
+        if (Input.GetKeyDown(KeyCode.Escape) && !levelMenuBehaviour.IsLocked())
 		{
-			SceneTransition.SwitchScene("MainMenu");
+			levelMenuBehaviour.gameObject.SetActive(!levelMenuBehaviour.gameObject.activeSelf);
 		}
     }
 }
