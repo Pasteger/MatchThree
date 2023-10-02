@@ -5,6 +5,9 @@ using UnityEngine;
 public class CellsBehaviour : MonoBehaviour
 {
     public GameObject cells;
+
+    public GameObject meteorites;
+    private readonly List<GameObject> _meteorites = new();
     
     private readonly List<GameObject> _cells = new();
 
@@ -16,14 +19,37 @@ public class CellsBehaviour : MonoBehaviour
         cellsTransforms.Remove(cells.transform);
         _cells.AddRange(cellsTransforms.Select(cellTransform => cellTransform.gameObject).ToList());
         
+        var meteoritesTransforms = meteorites.transform.GetComponentsInChildren<Transform>().ToList();
+        meteoritesTransforms.Remove(meteorites.transform);
+        _meteorites.AddRange(meteoritesTransforms.Select(meteoritesTransform => meteoritesTransform.gameObject).ToList());
+        
         _fieldGenerator = gameObject.GetComponent<FieldGenerator>();
     }
 
     private void Update()
     {
-        StoneFall();
+        var skip = false;
+        RecalculateMeteorites();
+        foreach (var unused in _meteorites.Where(meteorite => 
+                     meteorite.GetComponent<MeteoriteBehaviour>().IsFelled()))
+        {
+            skip = true;
+        }
+        
+        if (!skip) StoneFall();
     }
 
+    private void RecalculateMeteorites()
+    {
+        for (var i = 0; i < _meteorites.Count; i++)
+        {
+            if (_meteorites[i] == null)
+            {
+                _meteorites.Remove(_meteorites[i]);
+            }
+        }
+    }
+    
     private void StoneFall()
     {
         foreach (var cell in _cells)

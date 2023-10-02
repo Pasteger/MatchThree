@@ -14,9 +14,11 @@ GameObject:
   - component: {fileID: 8366446657251654007}
   - component: {fileID: 7211607263470901426}
   - component: {fileID: 2591585993660319554}
+  - component: {fileID: 9190945008261900706}
   - component: {fileID: 5922776020514579080}
   - component: {fileID: 6160535601940301007}
   - component: {fileID: 3895395248316382158}
+  - component: {fileID: 5719127046073958141}
   m_Layer: 0
   m_Name: Main Level Camera
   m_TagString: MainCamera
@@ -108,11 +110,11 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 39db257370fd21f448cb2d435f77d1a3, type: 3}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -227,6 +229,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stones: {fileID: 0}
+--- !u!114 &9190945008261900706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6811478674394020821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82a3ca8607962054abb1c7c6168d7a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meteorites: {fileID: 0}
+  meteoritesText: {fileID: 0}
   scoreText: {fileID: 0}
 --- !u!114 &5922776020514579080
 MonoBehaviour:
@@ -241,6 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cells: {fileID: 0}
+  meteorites: {fileID: 0}
 --- !u!114 &6160535601940301007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,10 +271,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredScore: 0
-  scoreText: {fileID: 0}
-  endLevelMenuScoreText: {fileID: 0}
-  nextLevel: 
+  scoreboard: {fileID: 0}
   endLevelMenu: {fileID: 0}
+  nextLevel: 
 --- !u!114 &3895395248316382158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,3 +287,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelMenuBehaviour: {fileID: 0}
+--- !u!114 &5719127046073958141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6811478674394020821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a73ea0f983c544093b8e8421ace64c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musics: []

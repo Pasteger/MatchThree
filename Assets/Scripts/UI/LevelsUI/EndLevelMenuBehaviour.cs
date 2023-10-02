@@ -9,6 +9,11 @@ public class EndLevelMenuBehaviour : MonoBehaviour
     public Text levelNameText;
     public string nextLevel;
     
+    public ScoreCalculator scoreCalculator;
+    
+    public Text scoreText;
+    public Text meteoriteText;
+    
     private string _levelName;
     
     private void Start()
@@ -18,6 +23,9 @@ public class EndLevelMenuBehaviour : MonoBehaviour
         var regex = new Regex(@"([a-zA-Z]+)(\d+)");
 
         _levelName = regex.Replace(sceneName, "$1 $2");
+        
+        scoreText.text = scoreCalculator.Score.ToString();
+        meteoriteText.text = scoreCalculator.Meteorites.ToString();
     }
 
     private void Update()
