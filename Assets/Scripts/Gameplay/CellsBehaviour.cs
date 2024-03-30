@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CellsBehaviour : MonoBehaviour
 {
+    public StoneReactionHandler stoneReactionHandler;
+    
     public GameObject cells;
 
     public GameObject meteorites;
@@ -15,6 +17,8 @@ public class CellsBehaviour : MonoBehaviour
     
     private void Start()
     {
+        stoneReactionHandler = GetComponent<StoneReactionHandler>();
+        
         var cellsTransforms = cells.transform.GetComponentsInChildren<Transform>().ToList();
         cellsTransforms.Remove(cells.transform);
         _cells.AddRange(cellsTransforms.Select(cellTransform => cellTransform.gameObject).ToList());
@@ -28,6 +32,8 @@ public class CellsBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (stoneReactionHandler.isAnimation) return;
+        
         var skip = false;
         RecalculateMeteorites();
         foreach (var unused in _meteorites.Where(meteorite => 

@@ -1,15 +1,17 @@
 using System;
 using UnityEngine;
 
-public static class SelectedStonesHandler 
+public static class SelectedStonesHandler
 {
     private static GameObject _selectedStone;
     private static GameObject _targetStone;
+
+    public static bool pause;
     
     private static void SwapStones()
     {
         Swap();
-        
+
         UndoSetStone();
     }
 
@@ -25,20 +27,17 @@ public static class SelectedStonesHandler
         {
             return;
         }
-        
-        _selectedStone.tag = "Swaped";
-        _targetStone.tag = "Swaped";
-        
 
-        _selectedStone.transform.position = targetStonePosition;
-        _targetStone.transform.position = selectedStonePosition;
+        _selectedStone.tag = "Swapped";
+        _targetStone.tag = "Swapped";
         
-        _selectedStone.GetComponent<BoxCollider>().center = Vector3.zero;
-        _targetStone.GetComponent<BoxCollider>().center = Vector3.zero;
+        pause = true;
     }
 
     public static void SetStone(GameObject stone)
     {
+        if (pause) return;
+        
         if (_selectedStone == null)
         {
             _selectedStone = stone;
@@ -52,7 +51,7 @@ public static class SelectedStonesHandler
         {
             UndoSetStone();
         }
-        else 
+        else
         {
             _targetStone = stone;
             SwapStones();
